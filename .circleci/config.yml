@@ -1,0 +1,65 @@
+version: 2
+
+references:
+  container_base_config: &container_base_config
+    docker:
+      - image: circleci/node:8.11.3
+    working_directory: ~/authentication
+  restore_yarn_cache: &restore_yarn_cache
+    name: Restoring Cache - yarn
+    keys:
+      - comuque-frontend-yarn-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - comuque-frontend-yarn-v1-{{ .Branch }}-
+  save_yarn_cache: &save_yarn_cache
+    key: comuque-frontend-yarn-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+    paths:
+      - ~/.cache/yarn
+      - ./node_modules
+  system_information: &system_information
+    name: System information
+    command: |
+      echo "Node.js $(node -v)"
+      echo "npm $(npm -v)"
+      echo "Yarn v$(yarn --version)"
+
+jobs:
+  test:
+    <<: *container_base_config
+    steps:
+      - checkout
+      - restore_cache: *restore_yarn_cache
+      - run: *system_information
+      - run:
+          name: Install dependencies
+          command: yarn
+      - run:
+          name: ESLint
+          command: yarn run lint
+      - run:
+          name: Test
+          command: yarn test
+      - save_cache: *save_yarn_cache
+  deploy:
+    <<: *container_base_config
+    steps:
+      - checkout
+      - run: TMP_KEY=SERVICE_ACCOUNT_KEY_BASE64_${CIRCLE_BRANCH##*/} && eval echo '$'$TMP_KEY | base64 -D > ./service-account-key.json
+      - run: curl -sL http://ibm.biz/idt-installer | bash
+      - run: bx api https://api.ng.bluemix.net
+      - run: bx login -u ${BLUEMIX_USER} -p ${BLUEMIX_PASSWORD}
+      - run: bx target -o ${BLUEMIX_ORG} -s ${BLUEMIX_SPACE}
+      - run: bx app push ${APP_NAME}-${CIRCLE_BRANCH##*/}
+
+workflows:
+  version: 2
+  test_deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - deployment/production
+                - deployment/staging

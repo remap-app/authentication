@@ -1,0 +1,40 @@
+{
+  "name": "authentication",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ReMap Authentication Microservice",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\"",
+    "start": "micro -l tcp://0.0.0.0:${PORT:-3000}",
+    "dev": "micro-dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remap-app/authentication.git"
+  },
+  "author": "Shingo Sato",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/remap-app/authentication/issues"
+  },
+  "homepage": "https://github.com/remap-app/authentication#readme",
+  "engines": {
+    "node": "8.11.x",
+    "npm": "6.x.x",
+    "yarn": "1.x.x"
+  },
+  "dependencies": {
+    "firebase-admin": "^5.13.1",
+    "lodash.pick": "^4.4.0",
+    "micro": "^9.3.2",
+    "microrouter": "^3.1.3",
+    "statuses": "^1.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0",
+    "eslint-plugin-node": "^7.0.1",
+    "micro-dev": "^3.0.0"
+  }
+}
