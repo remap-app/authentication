@@ -3,7 +3,7 @@ const { router, get, post } = require('microrouter')
 const admin = require('firebase-admin')
 const statuses = require('statuses')
 const pick = require('lodash.pick')
-const serviceAccount = require('./service-account-key.json')
+const serviceAccount = require('./service-account-key.json') // eslint-disable-line
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
