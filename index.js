@@ -6,11 +6,9 @@ const { router, post } = require('microrouter')
 const cors = require('micro-cors-multiple-allow-origin')
 const admin = require('firebase-admin')
 const pick = require('lodash.pick')
-const serviceAccount = require('./service-account-key.json') // eslint-disable-line
+const initialize = require('./initialize-firebase')
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-})
+initialize()
 
 module.exports = cors({
   allowMethods: ['POST', 'OPTIONS'],
