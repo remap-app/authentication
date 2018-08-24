@@ -7,7 +7,7 @@ Verify Firebase ID Tokens.
 ## Authentication
 
 ```http
-curl / -d '{"idToken": "... token"}'
+curl / -d '{"id_token": "... token"}'
 
 HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8

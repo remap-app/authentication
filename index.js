@@ -19,7 +19,7 @@ module.exports = cors({
       let idToken
       try {
         const body = await json(req)
-        idToken = body.idToken
+        idToken = body.id_token
       } catch (e) {
         send(res, 400, { error: STATUS_CODES[400] })
         return
