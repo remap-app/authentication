@@ -43,7 +43,6 @@ jobs:
     <<: *container_base_config
     steps:
       - checkout
-      - run: TMP_KEY=SERVICE_ACCOUNT_KEY_BASE64_${CIRCLE_BRANCH##*/} && eval echo '$'$TMP_KEY | base64 -D > ./service-account-key.json
       - run: curl -sL http://ibm.biz/idt-installer | bash
       - run: bx api https://api.ng.bluemix.net
       - run: bx login -u ${BLUEMIX_USER} -p ${BLUEMIX_PASSWORD}
@@ -62,4 +61,4 @@ workflows:
             branches:
               only:
                 - deployment/production
-                - deployment/staging
+                # - deployment/staging
