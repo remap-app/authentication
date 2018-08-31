@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\"",
     "start": "micro -l tcp://0.0.0.0:${PORT:-3000}",
     "dev": "micro-dev",
-    "prestart": "echo $SERVICE_ACCOUNT_KEY_BASE64 | base64 -D > ./service-account-key.json"
+    "prestart": "echo $SERVICE_ACCOUNT_KEY_BASE64 | base64 --decode > ./service-account-key.json"
   },
   "repository": {
     "type": "git",
