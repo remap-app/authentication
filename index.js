@@ -31,19 +31,25 @@ module.exports = cors({
       }
   
       const decodedToken = await admin.auth().verifyIdToken(idToken)
-        .catch(() => send(res, 401, { error: STATUS_CODES[401] }))
+        .catch(() => {
+          send(res, 401, { error: STATUS_CODES[401] })
+        })
   
-      if (decodedToken) {
-        const responseBody = pick(decodedToken, [
-          'name',
-          'picture',
-          'auth_time',
-          'email',
-          'email_verified',
-          'uid',
-        ])
-        send(res, 200, responseBody)
+      if (!decodedToken) {
+        send(res, 401, { error: STATUS_CODES[401] })
+        return
       }
+
+      const responseBody = pick(decodedToken, [
+        'name',
+        'picture',
+        'auth_time',
+        'email',
+        'email_verified',
+        'uid',
+      ])
+
+      return responseBody
     })
   )
 )
