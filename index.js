@@ -29,14 +29,12 @@ module.exports = cors({
         send(res, 400, { error: STATUS_CODES[400] })
         return
       }
-  
-      const decodedToken = await admin.auth().verifyIdToken(idToken)
-        .catch(() => {
-          send(res, 401, { error: STATUS_CODES[401] })
-        })
-  
-      if (!decodedToken) {
-        send(res, 401, { error: STATUS_CODES[401] })
+
+      let decodedToken
+      try {
+        decodedToken = await admin.auth().verifyIdToken(idToken)
+      } catch (e) {
+        send(res, 401, { ...e.toJSON(), message: e.message, error: STATUS_CODES[401] })
         return
       }
 
